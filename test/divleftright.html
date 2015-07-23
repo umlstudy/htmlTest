@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+<style>
+div{
+    height:100px;
+}
+div.m{
+    border:5px solid black;
+    width: 100%;
+}
+div.r{
+    position:relative;
+    border:5px solid blue;
+    width:33%;
+}
+div.r1, div.r2{
+    border:5px solid red;
+}
+div.l{
+    float: left;
+    border:5px solid green;
+    width:33%;
+}
+div.r{
+    float: right;
+}
+div.r2{
+    position:absolute;
+    right:65px;
+    top:0px;
+}
+div.r1{
+    position:absolute;
+    width:60px;
+    right:0px;
+    top:0px;
+
+}
+</style>
+</head>
+<body>
+<div class="m">
+    <div class="l"></div>
+    <div class="r"></div>
+</div>
+<div class="m">
+    <div class="l"></div>
+    <div class="r">
+        <div class="r1"></div>
+        <div class="r2"></div>
+    </div>
+</div>
+</body>
+</html>

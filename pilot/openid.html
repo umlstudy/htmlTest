@@ -1,0 +1,37 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-KR">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.js"></script>
+
+<script type="text/javascript">
+var params = "scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile";
+params += "&state=/profile";
+params += "redirect_uri=http://mac.sejong.asia/oauth2callback";
+params += "response_type=code";
+params += "client_id=1072891593193.apps.googleusercontent.com";
+
+
+alert(params);
+
+$("#login").get("https://accounts.google.com/o/oauth2/auth", { 
+	data: params
+});
+</script>
+</head>
+<body>
+
+<!-- 
+<form name="openidLoginForm" action="/jsp/loginOpenidProc.jsp" method="post" >
+    <input id="googleId" name="googleId" value="https://www.google.com/accounts/o8/id" type="text" style="background:transparent url(../images/openid_icon.gif) no-repeat left center; border: 1px solid #2B87DD; height:20px; padding-left: 18px; padding-top: 2px" />
+    <input type="submit" name="login" value="로그인" />
+</form>
+ -->
+
+<a href="#" id="login">login</a>
+<br/>hello!!!<br/>hello!!!
+<a href="https://accounts.google.com/o/oauth2/auth?scope=https://www.googleapis.com/auth/userinfo.email https://www.googleapis.com/auth/userinfo.profile&state=/profile&redirect_uri=http://mac.sejong.asia:8080/miniblog-1.0/json2.do&response_type=code&client_id=1072891593193.apps.googleusercontent.com">login2</a>
+
+</body>
+</html>

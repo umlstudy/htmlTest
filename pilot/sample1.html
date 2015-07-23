@@ -1,0 +1,232 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="../../js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="../../js/gaya.js"></script>
+<script type="text/javascript" src="../../js/properties.js"></script>
+
+<!-- 
+<link href="../js/ckeditor/samples/sample.css" rel="stylesheet">
+ -->
+
+<style>
+
+body {
+	background: #ffffff;
+	margin: 0;
+	padding: 0px;
+	font: x-small Verdana, Arial;
+	text-align: center;
+	color: #333333;
+	font-size: small;
+}
+
+div {
+	display: block;
+}
+
+.post_list_item_title {
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	display: block;
+	-webkit-margin-before: 1.33em;
+	-webkit-margin-after: 1.33em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+	margin: 1em 0;
+	color: #333333;
+	font-size: 150%;
+	line-height: 1.1em;
+}
+
+.post_list_item_body {
+	color: #333333;
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	margin: 0 0 .75em;
+	line-height: 1.3em;
+	font-size: 125%;
+}
+
+.post_list_item_writer {
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	color: #333333;
+	font-size: 87%;
+	margin: 0 0 .75em;
+	line-height: 1.3em;
+}
+
+.post_list_item_reply {
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	-webkit-margin-before: 1.33em;
+	-webkit-margin-after: 1.33em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+	margin: 1em 0;
+	color: #999999;
+}
+
+.post_area_status_message {
+	style="background:#000000; color: #ff0000"
+}
+
+
+.post_list_area {
+	background:#bbbbff;
+}
+
+.post_list_left {
+	width: 10%;
+	float:left;
+	background:#eeeeff;
+}
+.post_list {
+	width: 70%;
+	float:left;
+	background:#ddddff;
+
+}
+.post_list_right {
+	width: 20%;
+	float:left;
+	background:#ccccff;
+}
+
+.post_list_item_template {
+	background:#aaaaff;
+	clear: both;
+}
+
+</style>
+
+<script>
+function add_post_list_item(post_list_item, data) {
+	if ( data.title ) {
+	    jQuery(post_list_item).find('.post_list_item_title').html(data.title);
+	} else {
+	    jQuery(post_list_item).find('.post_list_item_title').html('제목없음');
+	}
+	if ( data.body  ) {
+	    jQuery(post_list_item).find('.post_list_item_body').html(data.body);
+	} else {
+	    jQuery(post_list_item).find('.post_list_item_body').html('본문없음');
+	}
+	console.log(post_list_item);
+}
+</script>
+<title>lesejong miniblog</title>
+</head>
+<body>
+
+<div class='head_line'>lesejong miniblog</div>
+
+<div class='post_area'>
+	<form class='post_area_form'>
+		<textarea cols="80" id="post_text_area" name="blogText" rows="10">
+		</textarea>
+		<script>
+			CKEDITOR.replace('post_text_area');
+		</script>
+		<p>
+			<input type="submit" value="포스트">
+		</p>
+	</form>
+	<div class="post_area_status_message"></div>
+</div>
+
+<script>
+
+// 초기 목록 표시
+$(document).ready(function() {
+	$('.post_area_status_message').html("목록 로딩 중...");
+	
+	gaya.callback.url = appBaseUrl+'/dynamic/blog/list';
+	gaya.callback.success = function(data) {
+		if ( data.resultCode != 0 ) {
+			$('.post_area_status_message').html("<div class='failMessage'>" + data.errorMsg + "</br>쥔장에게 문의하시오.</div>");
+			return;
+		} else {
+			$('.post_area_status_message').html("");
+		}
+		$.each(data.result, function(index, element){
+		    console.log('My array has at position ' + index + ', this element value: ' + element);
+		    var post_list_item = $('.post_list_item_template').clone();
+		    jQuery(post_list_item).attr('class', 'post_list_item').appendTo('.post_list');
+		    add_post_list_item(post_list_item, element);
+		});
+	};
+	gaya.callback.get();
+});
+	
+//글 등록 이벤트
+$('.post_area_form').submit(function() {
+	gaya.callback.url = appBaseUrl+'/dynamic/blog/post';
+	gaya.callback.data = $('.post_area_form').serialize();
+	gaya.callback.type = 'post';
+	gaya.callback.success = function(data) {
+		if ( data.resultCode != 0 ) {
+			$('.post_area_status_message').html("<div class='failMessage'>" + data.errorMsg + "</br>쥔장에게 문의하시오.</div>");
+			return;
+		} else {
+			$('.post_area_status_message').html("<div class='successMessage'>" + data.email + " is a valid e-mail address. Thank you, " + data.name + ".</div>");
+		}
+	    var post_list_item = $('.post_list_item_template').clone();
+	    jQuery(post_list_item).attr('class', 'post_list_item').prependTo('.post_list');
+	    add_post_list_item(post_list_item, data.result);
+	};
+	gaya.callback.get();
+	
+	
+	/*
+    dataString = $('.post_area_form').serialize();
+    $.ajax({
+        type: "POST",
+        url: appBaseUrl+'/dynamic/blog/post',
+        data: dataString,
+        dataType: "json",
+        success: function(data) {
+			$('.post_area_result_message').html("<div class='successMessage'>" + data.email + " is a valid e-mail address. Thank you, " + data.name + ".</div>");
+			$.each(data.result, function(index, element){
+			    console.log('My array has at position ' + index + ', this element value: ' + element);
+			    var post_list_item = $('.post_list_item_template').clone();
+			    jQuery(post_list_item).attr('class', 'post_list_item').appendTo('.post_list');
+			    jQuery(post_list_item).find('.post_list_item_title').append(element.title);
+			    jQuery(post_list_item).find('.post_list_item_body').append(element.body);
+			    console.log(post_list_item);
+			});
+        }
+    });
+    */
+    return false;           
+});
+</script>
+
+<div class="post_list_area">
+	<div class="post_list_left">left</div>
+	<div class="post_list">middle<br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br></div>
+	<div class="post_list_right">right</div>
+</div>
+
+<div class="post_list_item_template">
+	<div class="post_list_item_title">
+		제목입니다.	
+	</div>
+	<div class="post_list_item_body">
+		본문입니다.	
+	</div>
+	<div class="post_list_item_writer">
+		작성자: dreamaker 시간: 오후 6:04	
+	</div>
+	<div class="post_list_item_reply">
+		댓글영역입니다.	
+	</div>
+</div>
+
+</body>
+</html>

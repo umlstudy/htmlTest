@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.js"></script>
+<meta charset="EUC-KR">
+<title>Insert title here</title>
+</head>
+<body>
+<script type="text/javascript">
+k = 4;
+var Func = function(param) {
+     this.b = 3;
+     this.x={
+  		param : param
+     };
+     this.foo = function() {
+          var k = 9;
+          alert(k); // 9
+          alert(this.k); // 10
+          alert(this.b); // 3
+          alert(this.x.param);
+     };
+     
+     function setB(b) {
+    	 this.b=b;
+     };
+};
+Func.prototype.k = 10;
+a = new Func(100);
+a.foo();
+
+Func.create=function() {
+	 return new Func(333);
+};
+
+b = Func.create();
+b.setB(99);
+b.foo();
+</script>
+
+<input type="text" id="bx"/><input type="button" name="bx"/>
+<input type="text" id="by"/><input type="button" name="by"/>
+</body>
+</html>

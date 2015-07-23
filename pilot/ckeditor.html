@@ -1,0 +1,456 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<script type="text/javascript" src="../../js/ckeditor/ckeditor.js"></script>
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="../../js/moment.min.js"></script>
+<script type="text/javascript" src="../../js/gaya.js"></script>
+<script type="text/javascript" src="../../js/util.js"></script>
+<script type="text/javascript" src="../../js/navigator.js"></script>
+<script type="text/javascript" src="../../js/properties.js"></script>
+
+<!-- 
+<link href="../js/ckeditor/samples/sample.css" rel="stylesheet">
+ -->
+<link href="../../css/buttons/style.css" rel="stylesheet">
+<link href="../../css/loading/loading.css" rel="stylesheet">
+
+<style>
+
+body {
+	background: #ffffff;
+	margin: 0;
+	padding: 0px;
+	font: x-small Verdana, Arial;
+	text-align: center;
+	color: #333333;
+	font-size: small;
+}
+
+div {
+	display: block;
+}
+
+.top_area {
+	background:#bbbbbb; 
+}
+
+.title_area {
+	/* background-color: #c4e1ff; */
+	background-color: #88c017; 
+	/* background-color: #7a7a7a; */
+	height: 120px;
+}
+
+.title_up_area {
+	color: #003366;
+	font: normal normal 210% Verdana, Arial, Sans-serif;
+	text-align: left;
+	padding-top: 18px;
+	margin: 0 1% .1em;
+	font-size: 100%;
+}
+.title_down_area {
+	line-height: 1.4em;
+	font-size: 50%;
+	color: #003366;
+	font: normal normal 210% Verdana, Arial, Sans-serif;
+	text-align: left;
+}
+
+.center_area {
+	background:#ff0000;
+}
+
+.center_left_part {
+	width: 10%;
+	float:left;
+	background:#eeeeff;
+	height: 100%;
+}
+
+.center_middle_part {
+	width: 70%;
+	float:left;
+	background:#ddddff;
+
+}
+.center_right_part {
+	width: 20%;
+	float:left;
+	background:#ccccff;
+}
+
+.post_area {
+	background:#cccccc; 
+}
+
+.post_text_area_normal_editor {
+	width: 100%;
+	height: 286px;
+	margin: 0;
+	padding: 0;
+	border-width: 0;
+}
+
+.post_area_form_container {
+    border: 0px solid #38c;
+    padding: 10px;
+}
+
+.post_area_status_message {
+	background:#dddddd; 
+	color: #ff0000;
+}
+
+.post_list_item_date {
+	font-weight: normal;
+	color: #999999;
+	font-size: 100%;
+	text-align: left;
+	margin: 3em 0em 0em 0em;
+}
+
+.post_list_item_title {
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	display: block;
+	-webkit-margin-before: 1.33em;
+	-webkit-margin-after: 1.33em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+	margin: 0.3em 0em 1em 0em;
+	color: #333333;
+	font-size: 150%;
+	line-height: 1.1em;
+}
+
+.post_list_item_body {
+	color: #333333;
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	margin: 0 0 .75em;
+	line-height: 1.3em;
+	font-size: 125%;
+}
+
+.post_list_item_writer {
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	color: #333333;
+	font-size: 87%;
+	margin: 0 0 .75em;
+	line-height: 1.3em;
+}
+
+.post_list_item_reply {
+	font: normal normal 100% Verdana, Arial, Sans-serif;
+	text-align: left;
+	-webkit-margin-before: 1.33em;
+	-webkit-margin-after: 1.33em;
+	-webkit-margin-start: 0px;
+	-webkit-margin-end: 0px;
+	font-weight: bold;
+	margin: 1em 0;
+	color: #999999;
+}
+
+.post_list_item_template {
+	background:#aaaaff;
+}
+
+.post_area_write_button {
+	width: 100%;
+	height: 50px;
+	font-size: 250%;
+}
+
+</style>
+
+<script>
+function clone_post_list_item(data) {
+	
+    var $post_list_item = $('.post_list_item_template').clone();
+    $post_list_item.attr('class', 'post_list_item');
+    $post_list_item.css('display','block');
+
+	if ( data.title ) {
+		$post_list_item.find('.post_list_item_title').html(data.title);
+	} else {
+		$post_list_item.find('.post_list_item_title').html('제목없음');
+	}
+	if ( data.body  ) {
+		$post_list_item.find('.post_list_item_body').html(data.body);
+	} else {
+		$post_list_item.find('.post_list_item_body').html('본문없음');
+	}
+	
+	var fulldate = new Date(data.createDate);
+	var time = moment(fulldate).format("HH:mm");
+	var date = moment(fulldate).format("YYYY. M. D.");
+	
+	$post_list_item.find('.post_list_item_date').html(date);
+	$post_list_item.find('.post_list_item_writer').html("작성자: {0} 시간: {1}".format("개똥이", time));
+	
+	console.log($post_list_item);
+	
+	return $post_list_item;
+}
+
+function show_post_area_type_b() {
+	$('.post_area_type_a').css('display', 'none');
+	$('.post_area_type_c').css('display', 'none');
+
+	$('.post_area_type_b').css('display', 'block');
+}
+
+function show_post_area_type_a() {
+	$('.post_area_type_b').css('display', 'none');
+	$('.post_area_type_c').css('display', 'none');
+
+	$('.post_area_type_a').css('display', 'block');
+}
+
+function show_post_area_type_c() {
+	$('.post_area_type_a').css('display', 'none');
+	$('.post_area_type_b').css('display', 'none');
+
+	$('.post_area_type_c').css('display', 'block');
+}
+
+function CKupdate(){
+    for ( instance in CKEDITOR.instances )
+        CKEDITOR.instances[instance].updateElement();
+}
+
+function post(params) {
+	console.log("post params ? " + params);
+	
+	var callUrl = appBaseUrl+'/dynamic/blog/post';
+	var whenSuccess = function(data) {
+		if ( data.resultCode != 0 ) {
+			$('.post_area_status_message').html("<div class='failMessage'>" + data.errorMsg + "</br>쥔장에게 문의하시오.</div>");
+		} else {
+			$('.post_area_status_message').html("<div class='successMessage'>" + data.email + " is a valid e-mail address. Thank you, " + data.name + ".</div>");
+			var $post_list_item = clone_post_list_item(data.result);
+		    $post_list_item.prependTo('.post_list');
+		    show_post_area_type_a();
+		}
+	};
+	
+	RemoteCall.createPost().setSuccess(whenSuccess).call(callUrl, params);
+}
+
+var loadingCircle = null;
+function show_list(from, count, nav) {
+	if ( loadingCircle == null ) {
+		var callUrl = appBaseUrl+'/css/loading/loadingcircle.html';
+		var whenSuccess = function(data) {
+			loadingCircle = data;
+			show_list_real(from, count, loadingCircle, nav);
+		};
+		RemoteCall.createPost().setSuccess(whenSuccess).setDataType('html').call(callUrl);
+	} else {
+		show_list_real(from, count, loadingCircle, nav);
+	}
+}
+
+function show_list_real(from, count, loadingMessage, nav) {
+	$('.post_list').empty();
+	$('.post_area_status_message').html(loadingMessage);
+	
+	var callUrl = appBaseUrl+ "/dynamic/blog/blogList";
+	var params = "from={0}&count={1}".format(from, count);
+	var whenSuccess = function(data) {
+		if ( data.resultCode != 0 ) {
+			$('.post_area_status_message').html("<div class='failMessage'>" + data.errorMsg + "</br>쥔장에게 문의하시오.</div>");
+			return;
+		} else {
+			$('.post_area_status_message').html("");
+		}
+		$.each(data.result, function(index, element){
+		    console.log('My array has at position ' + index + ', this element value: ' + element);
+		    var $post_list_item = clone_post_list_item(element);
+		    $post_list_item.appendTo('.post_list');
+		});
+		
+		if ( nav != null ) {
+			var endReached = data.result.length < nav.count;
+			nav.refreshNav(endReached);
+		}
+	};
+	
+	RemoteCall.createGet().setSuccess(whenSuccess).call(callUrl, params);
+}
+
+var loadingCircle;
+
+//초기 목록 표시
+$(document).ready(function() {
+	
+	// 1.리스트 취득
+	nav.home();
+	
+	// 2.버튼 이벤트 등록
+	$('.post_area_write_button').click(function() {
+		show_post_area_type_b();
+	});
+	
+	// 3.버튼 이벤트 등록
+	$('.post_area_form_close_button').click(function() {
+		event.preventDefault();
+		show_post_area_type_a();
+	});
+	
+	// 4.버튼 이벤트 등록
+	$('.post_area_form_ckeditor_button').click(function() {
+		event.preventDefault();
+		show_post_area_type_b();
+	});
+	
+	// 5.버튼 이벤트 등록
+	$('.post_area_form_normal_editor_button').click(function() {
+		event.preventDefault();
+		show_post_area_type_c();
+	});
+	
+	// 6.글 등록 이벤트 등록(ckeditor)
+	$('.post_area_form_ckeditor').submit(function() {
+		event.preventDefault();
+		CKupdate();
+		post($('.post_area_form_ckeditor').serialize());
+		return false;           
+	});
+	
+	
+	// 7.글 등록 이벤트 등록(normaleditor)
+	$('.post_area_form_normal_editor').submit(function() {
+		event.preventDefault();
+		post($('.post_area_form_normal_editor').serialize());
+		return false;           
+	});
+
+	// 버튼 표시
+	show_post_area_type_a();
+});
+
+
+</script>
+<title>lesejong miniblog</title>
+</head>
+<body>
+
+<div class='top_area'>lesejong miniblog !!!!!!!!!!!!!!!</div>
+<div class='title_area'>
+<div class='title_up_area'><img src="../../images/lesejong_logo.png" height="65px"/></div>
+<div class='title_down_area'>descriptons</div>
+</div>
+
+<div class="center_area">
+<div class="center_left_part">left</div>
+<div class="center_middle_part">
+
+<div class='post_area'>
+	<!-- 2.1.write_button -->
+	<div class='post_area_type_a' style="display:none;">
+		<button class='post_area_write_button large orange button'>새글 작성</button>
+	</div>
+	
+	<!-- 2.2.ckeditor_write_form -->
+	<div class='post_area_type_b' style="display:none;">
+		<form class='post_area_form_ckeditor'>
+			<textarea cols="80" id="post_text_area" name="blogText" rows="10"></textarea>
+			<input type='hidden' name="type" value="ckeditor"/>
+			<script>
+				CKEDITOR.replace('post_text_area');
+			</script>
+			<div style="width:100%;background:#eeeeee;">
+				<button class="post_area_form_clear_button large orange button">본문클리어</button>
+				<button class="post_area_form_normal_editor_button large orange button">보통입력기</button>
+				<button type="submit" class="large orange button">투고</button>
+				<button class="post_area_form_close_button large orange button">취소</button>
+			</div>
+			<div style="width:100%;background:#eeeeee;">
+			</div>
+		</form>
+	</div>
+	
+	<!-- 2.3.normal editor_write_form -->
+	<div class='post_area_type_c' style="display:none;">
+		<form class='post_area_form_normal_editor'>
+			<div class='post_area_form_container'>
+				<textarea cols="80" class="post_text_area_normal_editor" name="blogText" rows="10"></textarea>
+				<input type='hidden' name="type" value="normal"/>
+			</div>
+			<div style="width:100%;background:#eeeeee;">
+				<button class="post_area_form_clear_button large orange button">본문클리어</button>
+				<button class="post_area_form_ckeditor_button large orange button">서식입력기</button>
+				<button type="submit" class="large orange button">투고</button>
+				<button class="post_area_form_close_button large orange button">취소</button>
+			</div>
+			<div style="width:100%;background:#eeeeee;">
+			</div>
+		</form>
+	</div>
+	
+	<div class="post_area_status_message"></div>
+</div>
+
+<div class="post_list">
+</div>
+
+</div>
+
+<div class="center_right_part">right</div>
+
+</div>
+
+<div style="clear: both;background:#eeeeff;">
+<a href="#" id="recent_list" style="display:none;">최근게시물</a> 
+<a href="#" id="home" style="display:none;">홈</a> 
+<a href="#" id="old_list" style="display:none;">이전 게시물</a>
+<script>
+
+var re=$('#recent_list');
+var he=$('#home');
+var oe=$('#old_list');
+var nav = new Navigator(oe, he, re, show_list);
+
+$('#home').click(function() {
+	nav.home();
+});
+
+$('#old_list').click(function() {
+	nav.old();
+});
+
+$('#recent_list').click(function() {
+	nav.recent();
+});
+</script>
+</div>
+
+<!-- div 템플릿 목록 -->
+<!-- 1.post_list_item -->
+<div class="post_list_item_template" style="display:none;clear: both;">
+	<div class="post_list_item_date">
+	</div>
+	<div class="post_list_item_title">
+		제목입니다.	
+	</div>
+	<div class="post_list_item_body">
+		본문입니다.	
+	</div>
+	<div class="post_list_item_writer">
+		작성자: dreamaker 시간: 오후 6:04	
+	</div>
+	<!-- 
+	<div class="post_list_item_reply">
+		댓글영역입니다.	
+	</div>
+	 -->
+</div>
+</body>
+</html>

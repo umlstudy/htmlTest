@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<script type="text/javascript" src="../../js/jquery/jquery-1.9.1.js"></script>
+<script type="text/javascript" src="../../js/gaya.js"></script>
+<script type="text/javascript">
+/*
+gaya.callback.url= 'http://www.daum.net';
+var data ={};
+data.q = 'test';
+data.apikey = '947f96c9d2518613faae766eed75bca030ad67d7';
+data.result = '10';
+data.output = 'json';
+data.callback = function callback( data ) {
+    alert("!!!");
+};
+
+gaya.callback.data = data;
+gaya.callback.url = 'http://localhost:8080/miniblog/json2?aaa=333';
+gaya.callback.dataType = 'json';
+gaya.callback.get();
+*/
+
+gaya.callback.url = 'http://localhost:8080/miniblog/blog/json5.do?aaa=333';
+gaya.callback.dataType = 'jsonp';
+gaya.callback.get();
+
+/*
+jQuery.getJSON('http://localhost:8080/miniblog/json?&callback=?', 
+		function(data) {
+		    alert(data);
+		});
+
+function jsonp_callback( data )
+{
+    alert("!!!");
+}
+$(document).ready(function(){
+    loadData();
+});
+
+function loadData()
+{
+$.ajax({
+    url: "http://apis.daum.net/search/image?q=test&" +
+                   "apikey=947f96c9d2518613faae766eed75bca030ad67d7"
+    , sucess: function( data, textStatus, jqXHR )
+              {
+                  alert("success");
+              }
+    , error: function( jqXHR, textStatus, errorThrown )
+             {
+                alert( textStatus + ", " + errorThrown );
+             }
+});
+}
+*/
+
+/*
+$.ajax({
+	    url : "http://localhost:8080/miniblog/json",
+	    dataType : "jsonp",
+	    jsonp : "callback",
+	    success: function(data) {
+	        if(data != null)    {
+	            alert(data);
+	        }
+	    }
+	});
+ */
+
+</script>
+</head>
+<body>
+
+</body>
+</html>
