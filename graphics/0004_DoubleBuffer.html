@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HTML5 Canvas Demo</title>
+<!--[if IE]>
+  <script type="text/javascript" src="excanvas.js"></script>
+<![endif]-->
+</head>
+<body>
+<div style="margin-left:30px;">
+<canvas id="canvas1" width="400" height="400" style="border: 10px blue solid">
+</canvas>
+<br /><br />
+<a href="index.html">back</a>
+</div>
+<script>
+// http://kaioa.com/node/103
+// canvas element in DOM
+var canvas1 = document.getElementById('canvas1');
+var context1 = canvas1.getContext('2d');
+
+// buffer canvas
+
+// create something on the canvas
+context1.beginPath();
+context1.moveTo(10,10);
+context1.lineTo(40,150);
+context1.stroke();
+context1.lineWidth=8;      
+
+context1.restore();
+//render the buffered canvas onto the original canvas element
+
+</script>
+</body>
+</html>

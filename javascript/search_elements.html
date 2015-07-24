@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTest</title>
+</head>
+<body>
+<ol id="people">
+<li>John</li>
+<li>Rodger</li>
+<li>Hugo</li>
+</ol>
+<script>
+
+var elem = document.getElementById('people');
+
+var list = elem.getElementsByTagName('li');
+alert(list[0].innerHTML);
+
+
+</script>
+<p name="age">19</p>
+<p name="age">21</p>
+<script>
+var elements = document.getElementsByName('age');
+alert(elements[0].innerHTML);
+</script>
+
+<div class="a b c">Yep</div>
+<script>
+alert( document.getElementsByClassName('a')[0].innerHTML )
+</script>
+
+<div>
+<ul class="myarea">
+  <li>The</li>
+  <li>Test</li>
+</ul>
+<ul>
+  <li>Is</li>
+  <li>Passed</li>
+</ul>
+</div>
+<script>
+  var elements = document.querySelectorAll('UL > LI:last-child')
+
+  for(var i=0; i<elements.length; i++) {
+    alert(elements[i].innerHTML )
+  }
+  
+  // 
+  var myarea = document.getElementsByClassName('myarea')[0];
+  var elements2 = myarea.querySelectorAll('LI:first-child')
+  for(var i=0; i<elements2.length; i++) {
+    alert(elements2[i].innerHTML )
+  }
+</script>
+</body>
+</html>

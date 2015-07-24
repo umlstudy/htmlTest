@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>HTML5 Canvas Demo</title>
+<!--[if IE]>
+  <script type="text/javascript" src="excanvas.js"></script>
+<![endif]-->
+</head>
+<body>
+<div style="margin-left:30px;">
+<canvas id="canvas1" width="400" height="400" style="border: 10px blue solid">
+</canvas>
+<br /><br />
+<a href="index.html">back</a>
+</div>
+<script>
+// canvas element in DOM
+var canvas1 = document.getElementById('canvas1');
+var context1 = canvas1.getContext('2d');
+
+// buffer canvas
+var canvas2 = document.createElement('canvas');
+canvas2.width = 150;
+canvas2.height = 150;
+var context2 = canvas2.getContext('2d');
+
+// create something on the canvas
+context2.beginPath();
+context2.moveTo(10,10);
+context2.lineTo(40,150);
+context2.stroke();
+context2.lineWidth=8;      
+
+//render the buffered canvas onto the original canvas element
+context1.drawImage(canvas2, 0, 0);
+
+</script>
+</body>
+</html>

@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTest</title>
+</head>
+<body>
+<script>
+// 1.
+var animal = { eats: true }
+var rabbit = { jumps: true }
+
+rabbit.__proto__ = animal  // inherit
+
+alert(rabbit.jumps + " -- " + rabbit.eats) // true
+
+// 2.
+var fedUpRabbit = { eats: false}
+
+fedUpRabbit.__proto__ = animal  
+
+alert(fedUpRabbit.eats) // false
+
+// 3. 생성자
+rabbit = Object.create(animal)
+alert(rabbit.eats) // true
+
+// 4.
+function Rabbit(name) { 
+  this.name = name
+}
+var rabbit = new Rabbit('4.John')
+alert(rabbit.name) // John
+
+// 5.
+var animal = { eats: true }
+function Rabbit(name) { 
+  this.name = name
+}
+Rabbit.prototype = animal 
+var rabbit = new Rabbit('John')
+alert( "5." +rabbit.eats ) // true, because rabbit.__proto__ == animal
+
+// 6
+function Rabbit(name) {
+  this.name = name
+}
+Rabbit.prototype = { eats: true }
+var rabbit = new Rabbit('John')
+alert( rabbit.hasOwnProperty('eats') ) // false, in prototype
+alert( rabbit.hasOwnProperty('name') ) // true, in object</script>
+</body>
+</html>

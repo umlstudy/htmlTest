@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>JSTest</title>
+</head>
+<body>
+<script>
+
+var animal = { eats: true };
+var Rabbit = function(name) { 
+  this.name = name;
+};
+var rabbit = new Rabbit('1.John')
+console.log(rabbit.name);
+//false, in prototype
+console.log("1.rabbit.hasOwnProperty('eats') ? " + rabbit.hasOwnProperty('eats') );
+//true, in object
+console.log("1.rabbit.hasOwnProperty('name') ? " + rabbit.hasOwnProperty('name') );
+
+var animal = { eats: true };
+Rabbit.prototype = animal;
+
+console.log(rabbit.name);
+//false, in prototype
+console.log("1-1.rabbit.hasOwnProperty('eats') ? " + rabbit.hasOwnProperty('eats') );
+// true, in object
+console.log("1-1.rabbit.hasOwnProperty('name') ? " + rabbit.hasOwnProperty('name') );
+
+var rabbit = new Rabbit('2.Park')
+console.log(rabbit.name);
+// false, in prototype
+console.log("2.rabbit.hasOwnProperty('eats') ? " + rabbit.hasOwnProperty('eats') );
+// true, in object
+console.log("2.rabbit.hasOwnProperty('name') ? " + rabbit.hasOwnProperty('name') );
+</script>
+
+</body>
+</html>
