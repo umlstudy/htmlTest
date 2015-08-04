@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<title>HTML5 TaskMgr</title>
+	<!--[if IE]>
+	  <script type="text/javascript" src="excanvas.js"></script>
+	<![endif]-->
+	<script type="text/javascript" src="senyu.js"></script>
+</head>
+<body>
+	<div style="margin-left:30px;">
+	<canvas id="targetCanvas" width="400" height="400" style="border: 10px blue solid">
+	</canvas>
+	</div>
+	<script>
+	// 1.
+	var targetCanvas = document.getElementById('targetCanvas');
+	var targetContext = targetCanvas.getContext('2d');
+	
+	// 2.buffer canvas
+	var bufferCanvas = document.createElement('canvas');
+	bufferCanvas.width = 400;
+	bufferCanvas.height = 400;
+	var bufferContext = bufferCanvas.getContext('2d');
+
+	function line() {	
+		senyu.clearArea(bufferContext, 0,0, 400, 400, 3);
+		senyu.drawBarGraph(bufferContext, 10, 10,7); 
+		senyu.drawBarGraph(bufferContext, 60, 10, 95); 
+		senyu.drawBarGraph(bufferContext, 110, 10, 15); 
+		senyu.drawBarGraph(bufferContext, 160, 10, 1); 
+		bufferContext.stroke();
+		targetContext.drawImage(bufferCanvas, 0, 0);
+	}
+	
+	// 4.
+	setInterval(line, 100);
+	</script>
+</body>
+</html>
