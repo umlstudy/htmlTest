@@ -1,31 +1,71 @@
-var Senyu = function(canvas, graphCount) {
-	this.graphCount = graphCount;
-	this.barCount = 17;
-	this.singleBarWidth = 20;
-	this.spaceBetweenBar = 1;
-	this.leftShift = 1;
-	this.green = '#00FF00';
-	this.darkGreen = '#008000';
-	this.defaultBackgroundColor = '#000000';
-	this.defaultFont = '15px Arial';
-	this.paddingTop = this.paddingLeft = 10;
-	
-	this.canvas = canvas;
-	this.canvasContext = canvas.getContext('2d');
-	
-	this.bufferCanvas = document.createElement('canvas');
-	this.bufferContext = this.bufferCanvas.getContext('2d');
-	
-	this.width = this.paddingTop*2 + 60 * this.graphCount;
-	this.height = this.paddingLeft*2 + this.barCount*3 + 20 + 30;
-	
-	canvas.style.width = this.width;
-	canvas.style.height = this.height;
+var assert = function(condition, message) {
+    if (!condition) {
+        throw message || "Assertion failed.";
+    }
 };
 
-Senyu.fn = Senyu.prototype;
+var throwError = function(msg) {
+	var e = new Error('dummy');
+	var stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
+		.replace(/^\s+at\s+/gm, '')
+		.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
+		.split('\n');
+	console.log(stack);
+	throw msg;
+};
+
+var Senyu = function(canvas, prop) {
+	
+	if (!(this instanceof arguments.callee )) {
+		throwError('you must use with \'new\' keyword.');
+	}
+	
+	prop = prop || {};
+	assert(typeof prop === 'object');
+	assert(typeof prop.graphCount === "undefined" || typeof prop.graphCount === "number");
+	assert(typeof prop.barCount === "undefined" || typeof prop.barCount === "number" );
+	assert(typeof prop.singleBarWidth === "undefined" || typeof prop.singleBarWidth === "number" );
+	assert(typeof prop.spaceBetweenBar === "undefined" || typeof prop.spaceBetweenBar === "number" );
+	assert(typeof prop.leftShift === "undefined" || typeof prop.leftShift === "number" );
+	assert(typeof prop.font === "undefined" || typeof prop.font === "string" );
+	assert(typeof prop.paddingTop === "undefined" || typeof prop.paddingTop === "string" );
+	assert(typeof prop.paddingLeft === "undefined" || typeof prop.paddingLeft === "string" );
+	
+	this.prop = {};
+	this.prop.graphCount = prop.graphCount || 1;
+	this.prop.barCount = prop.barCount || 17;
+	this.prop.singleBarWidth = prop.singleBarWidth || 20;
+	this.prop.spaceBetweenBar = prop.spaceBetweenBar || 1;
+	this.prop.leftShift = prop.leftShift || 1;
+	this.prop.green = '#00FF00';
+	this.prop.darkGreen = '#008000';
+	this.prop.backgroundColor = prop.backgroundColor || '#000000';
+	this.prop.font = prop.font || '15px Arial';
+	this.prop.paddingTop = prop.paddingTop || 10;
+	this.prop.paddingLeft = prop.paddingLeft || 10;
+	
+	// calculate canvas size.
+	this.prop.width = this.prop.paddingTop*2 + 60 * this.prop.graphCount;
+	this.prop.height = this.prop.paddingLeft*2 + this.prop.barCount*3 + 20 + 30;
+	
+	// define canvas
+	this.prop.canvas = canvas;
+	this.prop.canvas.width = this.prop.width;
+	this.prop.canvas.height = this.prop.height;
+	this.prop.canvasContext = canvas.getContext('2d');
+	
+	// create DoubleBuffer
+	this.prop.bufferCanvas = document.createElement('canvas');
+	this.prop.bufferCanvas.width = this.prop.width;
+	this.prop.bufferCanvas.height = this.prop.height;
+	this.prop.bufferContext = this.prop.bufferCanvas.getContext('2d');
+};
+
+//Senyu.fn = Senyu.prototype;
+//Senyu.prototype.constructor = Senyu;
 	
 !function(proto) {
+	
 	var drawDotLine = function(ctx, x, y, width) {
 		for ( var dx=0; dx<width; dx+=2 ) {
 			ctx.fillRect( x+dx, y, 1, 1 );
@@ -39,14 +79,14 @@ Senyu.fn = Senyu.prototype;
 	var clearArea = function(ctx, x, y, width, height) {
 		var oriFillStyle = ctx.fillStyle;
 		{
-			ctx.fillStyle = this.defaultBackgroundColor;
+			ctx.fillStyle = this.backgroundColor;
 			ctx.fillRect(x,y,width, height);
 		}
 		ctx.fillStyle = oriFillStyle;
 	};
 	
-	var drawBarGraphPart = function(senyu, startX, startY, fillBarPercent) {
-		var ctx = senyu.bufferContext;
+	var drawBarGraphPart = function(prop, startX, startY, fillBarPercent) {
+		var ctx = prop.bufferContext;
 		var oriFillStyle = ctx.fillStyle;
 		{
 			var cx, cy;
@@ -54,27 +94,27 @@ Senyu.fn = Senyu.prototype;
 			var singleBarWidth_;
 			var leftShift_;
 			
-			var fillBarCnt = Math.round(senyu.barCount * fillBarPercent / 100);
-			for ( var dy=0;dy < senyu.barCount;dy++ ) {
-				if ( (senyu.barCount - dy ) <= fillBarCnt ) {
+			var fillBarCnt = Math.round(prop.barCount * fillBarPercent / 100);
+			for ( var dy=0;dy < prop.barCount;dy++ ) {
+				if ( (prop.barCount - dy ) <= fillBarCnt ) {
 					// drawLine
-					ctx.fillStyle = senyu.green;
+					ctx.fillStyle = prop.green;
 					funcDrawLine = drawLine;
-					singleBarWidth_ = senyu.singleBarWidth;
+					singleBarWidth_ = prop.singleBarWidth;
 					leftShift_ = 0;
 				} else {
 					// dotLine
-					ctx.fillStyle= senyu.darkGreen;
+					ctx.fillStyle= prop.darkGreen;
 					funcDrawLine = drawDotLine;
-					singleBarWidth_ = senyu.singleBarWidth;
-					leftShift_ = senyu.leftShift;
+					singleBarWidth_ = prop.singleBarWidth;
+					leftShift_ = prop.leftShift;
 				}
-				// 첫번째라인
+				// FirstRow
 				cx = startX;
 				cy = startY+dy*3
 				funcDrawLine(ctx, cx, cy, singleBarWidth_);
 				
-				// 두번째라인
+				// SecondRow
 				cx = startX+leftShift_;
 				cy = cy + 1;
 				funcDrawLine(ctx, cx, cy, singleBarWidth_);
@@ -83,18 +123,18 @@ Senyu.fn = Senyu.prototype;
 		ctx.fillStyle = oriFillStyle;
 	};
 	
-	var drawBarGraph = function(senyu, startX, startY, fillBarPercent) {
-		var ctx = senyu.bufferContext;
+	var drawBarGraph = function(prop, startX, startY, fillBarPercent) {
+		var ctx = prop.bufferContext;
 		var oriFillStyle = ctx.fillStyle;
 		
 		{
-			drawBarGraphPart(senyu, startX, startY, fillBarPercent);
-			startX = startX+senyu.singleBarWidth+senyu.leftShift+senyu.spaceBetweenBar;
-			drawBarGraphPart(senyu, startX, startY, fillBarPercent);
+			drawBarGraphPart(prop, startX, startY, fillBarPercent);
+			startX = startX+prop.singleBarWidth+prop.leftShift+prop.spaceBetweenBar;
+			drawBarGraphPart(prop, startX, startY, fillBarPercent);
 			
-			startY = startY + senyu.barCount*3 + 20;
-			ctx.fillStyle=senyu.green;
-			ctx.font = senyu.defaultFont;
+			startY = startY + prop.barCount*3 + 20;
+			ctx.fillStyle=prop.green;
+			ctx.font = prop.font;
 			ctx.textAlign='center'; 
 			ctx.fillText(Math.round(fillBarPercent)+'%',startX,startY);
 			
@@ -103,20 +143,20 @@ Senyu.fn = Senyu.prototype;
 	};
 	
 	proto.drawBarGraph = function(fillBarPercents) {
-		if ( this.graphCount != fillBarPercents.length ) {
-			throw "this.graphCount != fillBarPercents.length";
+		if ( this.prop.graphCount != fillBarPercents.length ) {
+			printStackTrace();
+			throwError("this.graphCount != fillBarPercents.length");
 		}
-		var bufferContext = this.bufferContext;
-		var sx = this.paddingLeft;
-		var sy = this.paddingTop;
+		var bufferContext = this.prop.bufferContext;
+		var sx = this.prop.paddingLeft;
+		var sy = this.prop.paddingTop;
 		
-		clearArea(bufferContext, 0,0, this.width, this.height);
+		clearArea(bufferContext, 0,0, this.prop.width, this.prop.height);
 		for(var idx in fillBarPercents) {
-			drawBarGraph(this, sx, sy, fillBarPercents[idx]); 
+			drawBarGraph(this.prop, sx, sy, fillBarPercents[idx]); 
 			sx = sx + 60;
     	}
 		bufferContext.stroke();
-		this.canvasContext.drawImage(this.bufferCanvas, 0, 0);
+		this.prop.canvasContext.drawImage(this.prop.bufferCanvas, 0, 0);
 	};
-	
 }(Senyu.prototype);
