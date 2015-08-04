@@ -9,32 +9,58 @@
 </head>
 <body>
 	<div style="margin-left:30px;">
-	<canvas id="targetCanvas" width="400" height="400" style="border: 10px blue solid">
+	<canvas id="canvas1">
 	</canvas>
 	</div>
 	<script>
-	// 1.
-	var targetCanvas = document.getElementById('targetCanvas');
-	var targetContext = targetCanvas.getContext('2d');
+	var canvas1 = document.getElementById('canvas1');
+	var senyuForCanvas1 = new Senyu(canvas1, 5);
 	
-	// 2.buffer canvas
-	var bufferCanvas = document.createElement('canvas');
-	bufferCanvas.width = 400;
-	bufferCanvas.height = 400;
-	var bufferContext = bufferCanvas.getContext('2d');
+	setInterval(function() {
+		var v1 = Math.random()*100%100;
+		var v2 = Math.random()*100%100;
+		var v3 = Math.random()*100%100;
+		var v4 = Math.random()*100%100;
+		var v5 = Math.random()*100%100;
 
-	function line() {	
-		senyu.clearArea(bufferContext, 0,0, 400, 400, 3);
-		senyu.drawBarGraph(bufferContext, 10, 10,7); 
-		senyu.drawBarGraph(bufferContext, 60, 10, 95); 
-		senyu.drawBarGraph(bufferContext, 110, 10, 15); 
-		senyu.drawBarGraph(bufferContext, 160, 10, 1); 
-		bufferContext.stroke();
-		targetContext.drawImage(bufferCanvas, 0, 0);
-	}
+		senyuForCanvas1.drawBarGraph([v1,v2,v3,v4,v5]);
+	}, 200);
+	</script>
 	
-	// 4.
-	setInterval(line, 100);
+	<canvas id="canvas2">
+	</canvas>
+	</div>
+	<script>
+	var canvas2 = document.getElementById('canvas2');
+	var senyuForCanvas2 = new Senyu(canvas2, 3);
+	
+	setInterval(function() {
+		var v1 = Math.random()*100%100;
+		var v2 = Math.random()*100%100;
+		var v3 = Math.random()*100%100;
+
+		senyuForCanvas2.drawBarGraph([v1,v2,v3]);
+	}, 500);
+	</script>
+	
+	<canvas id="canvas3">
+	</canvas>
+	</div>
+	<script>
+	var canvas3 = document.getElementById('canvas3');
+	var senyuForCanvas3 = new Senyu(canvas3, 8);
+	
+	setInterval(function() {
+		var v1 = Math.random()*100%100;
+		var v2 = Math.random()*100%100;
+		var v3 = Math.random()*100%100;
+		var v4 = Math.random()*100%100;
+		var v5 = Math.random()*100%100;	
+		var v6 = Math.random()*100%100;
+		var v7 = Math.random()*100%100;	
+		var v8 = Math.random()*100%100;
+		senyuForCanvas3.drawBarGraph([v1,v2,v3,v4,v5,v6,v7,v8]);
+	}, 300);
 	</script>
 </body>
 </html>
