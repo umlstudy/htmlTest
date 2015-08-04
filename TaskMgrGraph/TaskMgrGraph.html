@@ -5,7 +5,7 @@
 	<!--[if IE]>
 	  <script type="text/javascript" src="excanvas.js"></script>
 	<![endif]-->
-	<script type="text/javascript" src="senyu.js"></script>
+	<script type="text/javascript" src="senyu.js" charset="UTF-8"></script>
 </head>
 <body>
 	<div style="margin-left:30px;">
@@ -14,7 +14,7 @@
 	</div>
 	<script>
 	var canvas1 = document.getElementById('canvas1');
-	var senyuForCanvas1 = new Senyu(canvas1, {graphCount:7});
+	var senyuForCanvas1 = new Senyu(canvas1, {graphCount:7,gapBetweenGraph:19});
 	
 	setInterval(function() {
 		var v1 = Math.random()*100%100;
