@@ -8,25 +8,34 @@
 	<script type="text/javascript" src="senyu.js" charset="UTF-8"></script>
 </head>
 <body>
-	<div style="margin-left:30px;">
+	<h1>데모는 리프레시를 타이머로 했지만,  실제 그래프의 리프레시는 패킷 수신시에 실시.</h1>
 	<canvas id="canvas1" width="600">
 	</canvas>
-	</div>
 	<script>
 	var canvas1 = document.getElementById('canvas1');
-	var senyuForCanvas1 = new Senyu(canvas1, {graphCount:7,gapBetweenGraph:19});
+	try {
+		var param = {
+				graphCount:7,
+				singleBarWidth:40,
+				singleBarHeight:7,
+				gapBetweenGraph:40
+		};
+		var senyuForCanvas1 = new Senyu(canvas1, param);
+		setInterval(function() {
+			var v1 = Math.random()*100%100;
+			var v2 = Math.random()*100%100;
+			var v3 = Math.random()*100%100;
+			var v4 = Math.random()*100%100;
+			var v5 = Math.random()*100%100;
+			var v6 = Math.random()*100%100;
+			var v7 = Math.random()*100%100;
 	
-	setInterval(function() {
-		var v1 = Math.random()*100%100;
-		var v2 = Math.random()*100%100;
-		var v3 = Math.random()*100%100;
-		var v4 = Math.random()*100%100;
-		var v5 = Math.random()*100%100;
-		var v6 = Math.random()*100%100;
-		var v7 = Math.random()*100%100;
-
-		senyuForCanvas1.drawBarGraph([v1,v2,v3,v4,v5,v6,v7]);
-	}, 50);
+			senyuForCanvas1.drawBarGraph([v1,v2,v3,v4,v5,v6,v7]);
+		}, 100);
+	} catch (e) {
+		alert(e.message);
+	}
+	
 	</script>
 	
 	<canvas id="canvas2">
@@ -34,35 +43,68 @@
 	</div>
 	<script>
 	var canvas2 = document.getElementById('canvas2');
-	var senyuForCanvas2 = new Senyu(canvas2, {graphCount:3});
-	
-	setInterval(function() {
-		var v1 = Math.random()*100%100;
-		var v2 = Math.random()*100%100;
-		var v3 = Math.random()*100%100;
+	try {
+		var senyuForCanvas2 = new Senyu(canvas2, {graphCount:3});
+		
+		setInterval(function() {
+			var v1 = Math.random()*100%100;
+			var v2 = Math.random()*100%100;
+			var v3 = Math.random()*100%100;
 
-		senyuForCanvas2.drawBarGraph([v1,v2,v3]);
-	}, 500);
+			try {
+				senyuForCanvas2.drawBarGraph([v1,v2,v3]);
+			} catch ( e ) {
+				alert (e);
+			}
+		}, 500);
+	} catch (e) {
+		alert(e.message);
+	}
+	
 	</script>
 	
+	<br/>
 	<canvas id="canvas3">
 	</canvas>
-	</div>
 	<script>
 	var canvas3 = document.getElementById('canvas3');
-	var senyuForCanvas3 = new Senyu(canvas3, {graphCount:8});
-	
-	setInterval(function() {
-		var v1 = Math.random()*100%100;
-		var v2 = Math.random()*100%100;
-		var v3 = Math.random()*100%100;
-		var v4 = Math.random()*100%100;
-		var v5 = Math.random()*100%100;	
-		var v6 = Math.random()*100%100;
-		var v7 = Math.random()*100%100;	
-		var v8 = Math.random()*100%100;
-		senyuForCanvas3.drawBarGraph([v1,v2,v3,v4,v5,v6,v7,v8]);
-	}, 300);
+	try {
+		var param = {
+				graphCount:8,
+				singleBarWidth:40,
+				singleBarHeight:7,
+				gapBetweenGraph:40,
+				gapBetweenSingleBarRow:4,
+				gapBetweenSingleBar:5,
+				backgroundColor:'#332244',
+				paddingTop:30,
+				paddingLeft:40,
+				bottomLabelAreaHeight:50,
+				barCount:27
+		};
+		
+		var senyuForCanvas3 = new Senyu(canvas3, param);
+		senyuForCanvas3.initLabel(['홍길동','자장멘','시피유','램','선','유','도','김밤'])
+		
+		setInterval(function() {
+			var v1 = Math.random()*100%100;
+			var v2 = Math.random()*100%100;
+			var v3 = Math.random()*100%100;
+			var v4 = Math.random()*100%100;
+			var v5 = Math.random()*100%100;	
+			var v6 = Math.random()*100%100;
+			var v7 = Math.random()*100%100;	
+			var v8 = Math.random()*100%100;
+			
+			try {
+				senyuForCanvas3.drawBarGraph([v1,v2,v3,v4,v5,v6,v7,v8]);
+			} catch ( e ) {
+				alert (e);
+			}
+		}, 700);
+	} catch (e) {
+		alert(e.message);
+	}
 	</script>
 </body>
 </html>

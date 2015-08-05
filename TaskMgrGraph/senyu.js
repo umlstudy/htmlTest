@@ -1,93 +1,77 @@
-// assert
-var assert = function(condition, message) {
-    if (!condition) {
-        throw message || "Assertion failed.";
-    }
-};
-
-// handling exception
-var throwError = function(msg) {
-	var e = new Error('dummy');
-	var stack = e.stack.replace(/^[^\(]+?[\n$]/gm, '')
-		.replace(/^\s+at\s+/gm, '')
-		.replace(/^Object.<anonymous>\s*\(/gm, '{anonymous}()@')
-		.split('\n');
-	console.log(stack);
-	throw msg;
-};
-
-// Senyu
-var Senyu = function(canvas, prop) {
+/**
+ * 선유도 라이브 게이지 차트 API
+ * Senyu
+ */
+var Senyu = function(canvas, param) {
 	
 	if (!(this instanceof arguments.callee )) {
-		throwError('you must use with \'new\' keyword.');
+		Senyu.throwError('you must use with \'new\' keyword.');
 	}
 	
-	prop = prop || {};
+	param = param || {};
 	// assert type
-	assert(typeof prop === 'object');
-	assert(typeof prop.graphCount === "undefined" || typeof prop.graphCount === "number");
-	assert(typeof prop.barCount === "undefined" || typeof prop.barCount === "number" );
-	assert(typeof prop.singleBarWidth === "undefined" || typeof prop.singleBarWidth === "number" );
-	assert(typeof prop.gapBetweenSingleBar === "undefined" || typeof prop.gapBetweenSingleBar === "number" );
-	assert(typeof prop.singleBarHeight === "undefined" || typeof prop.singleBarHeight === "number" );
-	assert(typeof prop.gapBetweenSingleBarRow === "undefined" || typeof prop.gapBetweenSingleBarRow === "number" );
-	assert(typeof prop.gapBetweenGraph === "undefined" || typeof prop.gapBetweenGraph === "number" );
-	assert(typeof prop.leftShift === "undefined" || typeof prop.leftShift === "number" );
-	assert(typeof prop.font === "undefined" || typeof prop.font === "string" );
-	assert(typeof prop.paddingTop === "undefined" || typeof prop.paddingTop === "string" );
-	assert(typeof prop.paddingLeft === "undefined" || typeof prop.paddingLeft === "string" );
-	assert(typeof prop.bottomLabelAreaHeight === "undefined" || typeof prop.bottomLabelAreaHeight === "number" );
+	Senyu.assert (typeof param === 'object');
+	Senyu.assert (typeof param.graphCount === "undefined" || typeof param.graphCount === "number");
+	Senyu.assert (typeof param.barCount === "undefined" || typeof param.barCount === "number" );
+	Senyu.assert (typeof param.singleBarWidth === "undefined" || typeof param.singleBarWidth === "number" );
+	Senyu.assert (typeof param.gapBetweenSingleBar === "undefined" || typeof param.gapBetweenSingleBar === "number" );
+	Senyu.assert (typeof param.singleBarHeight === "undefined" || typeof param.singleBarHeight === "number" );
+	Senyu.assert (typeof param.gapBetweenSingleBarRow === "undefined" || typeof param.gapBetweenSingleBarRow === "number" );
+	Senyu.assert (typeof param.gapBetweenGraph === "undefined" || typeof param.gapBetweenGraph === "number" );
+	Senyu.assert (typeof param.leftShift === "undefined" || typeof param.leftShift === "number" );
+	Senyu.assert (typeof param.font === "undefined" || typeof param.font === "string" );
+	Senyu.assert (typeof param.paddingTop === "undefined" || typeof param.paddingTop === "number" );
+	Senyu.assert (typeof param.paddingLeft === "undefined" || typeof param.paddingLeft === "number" );
+	Senyu.assert (typeof param.bottomLabelAreaHeight === "undefined" || typeof param.bottomLabelAreaHeight === "number" );
 	
-	this.prop = {};
-	this.prop.graphCount = prop.graphCount || 1;
-	this.prop.barCount = prop.barCount || 17;
-	this.prop.singleBarWidth = prop.singleBarWidth || 20;
-	this.prop.singleBarHeight = prop.singleBarHeight || 2;
-	this.prop.gapBetweenSingleBarRow = prop.gapBetweenSingleBarRow || 1;
-	this.prop.gapBetweenSingleBar = prop.gapBetweenSingleBar || 1;
-	this.prop.gapBetweenGraph = prop.gapBetweenGraph || 10;
-	this.prop.leftShift = 1;
-	this.prop.green = '#00FF00';
-	this.prop.darkGreen = '#008000';
-	this.prop.backgroundColor = prop.backgroundColor || '#000000';
-	this.prop.font = prop.font || '15px Arial';
-	this.prop.paddingTop = prop.paddingTop || 10;
-	this.prop.paddingLeft = prop.paddingLeft || 10;
-	this.prop.bottomLabelAreaHeight = prop.bottomLabelAreaHeight || 40;
+	this.param = {};
+	this.param.graphCount = param.graphCount || 1;
+	this.param.barCount = param.barCount || 17;
+	this.param.singleBarWidth = param.singleBarWidth || 20;
+	this.param.singleBarHeight = param.singleBarHeight || 2;
+	this.param.gapBetweenSingleBarRow = param.gapBetweenSingleBarRow || 1;
+	this.param.gapBetweenSingleBar = param.gapBetweenSingleBar || 1;
+	this.param.gapBetweenGraph = param.gapBetweenGraph || 10;
+	this.param.leftShift = 1;
+	this.param.green = '#00FF00';
+	this.param.darkGreen = '#008000';
+	this.param.backgroundColor = param.backgroundColor || '#000000';
+	this.param.font = param.font || '15px Arial';
+	this.param.paddingTop = param.paddingTop || 10;
+	this.param.paddingLeft = param.paddingLeft || 10;
+	this.param.bottomLabelAreaHeight = param.bottomLabelAreaHeight || 40;
 	
 	// for convenience
-	prop = this.prop;
+	param = this.param;
 	
 	// assert value
-	assert ( prop.graphCount > 0 && prop.graphCount < 12, "prop.graphCount > 0 && prop.graphCount < 12");
-	assert ( prop.barCount > 9 && prop.barCount < 30, "prop.barCount > 9 && prop.barCount < 30");
-	assert ( prop.singleBarWidth > 4 && prop.singleBarWidth < 50, "prop.singleBarWidth > 4 && prop.singleBarWidth < 50");
-	assert ( prop.gapBetweenSingleBar > 0 && prop.gapBetweenSingleBar < 4, "prop.gapBetweenSingleBar > 0 && prop.gapBetweenSingleBar < 4");
-	assert ( prop.singleBarHeight > 0 && prop.singleBarHeight < 7, "prop.singleBarHeight > 0 && prop.singleBarHeight < 7");
-	assert ( prop.gapBetweenSingleBarRow > 0 && prop.gapBetweenSingleBarRow < 4, "prop.gapBetweenSingleBarRow > 0 && prop.gapBetweenSingleBarRow < 4");
-	assert ( prop.gapBetweenGraph > 5 && prop.gapBetweenGraph < 20, "prop.gapBetweenGraph > 5 && prop.gapBetweenGraph < 20");
-	assert ( (/^#(?:[0-9a-f]{3}){1,2}$/i).exec(prop.backgroundColor) !== null );
-	assert ( prop.paddingTop >= 0 && prop.paddingTop < 30, "prop.paddingTop >= 0 && prop.paddingTop < 30");
-	assert ( prop.paddingLeft >= 0 && prop.paddingLeft < 30, "prop.paddingLeft >= 0 && prop.paddingLeft < 30");
-	assert ( prop.bottomLabelAreaHeight >= 0 && prop.bottomLabelAreaHeight < 100, "prop.bottomLabelAreaHeight >= 0 && prop.bottomLabelAreaHeight < 100");
-	
+	Senyu.assert ( param.graphCount > 0 && param.graphCount < 12, "param.graphCount > 0 && param.graphCount < 12");
+	Senyu.assert ( param.barCount > 9 && param.barCount < 30, "param.barCount > 9 && param.barCount < 30");
+	Senyu.assert ( param.singleBarWidth > 4 && param.singleBarWidth < 50, "param.singleBarWidth > 4 && param.singleBarWidth < 50");
+	Senyu.assert ( param.gapBetweenSingleBar > 0 && param.gapBetweenSingleBar < 11, "param.gapBetweenSingleBar > 0 && param.gapBetweenSingleBar < 11");
+	Senyu.assert ( param.singleBarHeight > 0 && param.singleBarHeight < 11, "param.singleBarHeight > 0 && param.singleBarHeight < 11");
+	Senyu.assert ( param.gapBetweenSingleBarRow > 0 && param.gapBetweenSingleBarRow < 11, "param.gapBetweenSingleBarRow > 0 && param.gapBetweenSingleBarRow < 11");
+	Senyu.assert ( param.gapBetweenGraph > 5 && param.gapBetweenGraph < 41, "param.gapBetweenGraph > 5 && param.gapBetweenGraph < 41");
+	Senyu.assert ( (/^#(?:[0-9a-f]{3}){1,2}$/i).exec(param.backgroundColor) !== null );
+	Senyu.assert ( param.paddingTop >= 0 && param.paddingTop < 61, "param.paddingTop >= 0 && param.paddingTop < 61");
+	Senyu.assert ( param.paddingLeft >= 0 && param.paddingLeft < 61, "param.paddingLeft >= 0 && param.paddingLeft < 61");
+	Senyu.assert ( param.bottomLabelAreaHeight >= 0 && param.bottomLabelAreaHeight < 100, "param.bottomLabelAreaHeight >= 0 && param.bottomLabelAreaHeight < 100");
 	
 	// calculate canvas size.
-	prop.width = prop.paddingLeft*2 + ((prop.singleBarWidth*2+prop.gapBetweenSingleBar) * prop.graphCount) + (prop.gapBetweenGraph * (prop.graphCount - 1));
-	prop.height = prop.paddingTop*2 + (prop.singleBarHeight * prop.barCount) + (prop.gapBetweenSingleBarRow * (prop.barCount - 1)) + prop.bottomLabelAreaHeight;
+	param.width = param.paddingLeft*2 + ((param.singleBarWidth*2+param.gapBetweenSingleBar) * param.graphCount) + (param.gapBetweenGraph * (param.graphCount - 1));
+	param.height = param.paddingTop*2 + (param.singleBarHeight * param.barCount) + (param.gapBetweenSingleBarRow * (param.barCount - 1)) + param.bottomLabelAreaHeight;
 	
 	// define canvas
-	prop.canvas = canvas;
-	prop.canvas.width = prop.width;
-	prop.canvas.height = prop.height;
-	prop.canvasContext = canvas.getContext('2d');
+	param.canvas = canvas;
+	param.canvas.width = param.width;
+	param.canvas.height = param.height;
+	param.canvasContext = canvas.getContext('2d');
 	
 	// create DoubleBuffer
-	prop.bufferCanvas = document.createElement('canvas');
-	prop.bufferCanvas.width = prop.width;
-	prop.bufferCanvas.height = prop.height;
-	prop.bufferContext = prop.bufferCanvas.getContext('2d');
+	param.bufferCanvas = document.createElement('canvas');
+	param.bufferCanvas.width = param.width;
+	param.bufferCanvas.height = param.height;
+	param.bufferContext = param.bufferCanvas.getContext('2d');
 };
 
 !function(proto) {
@@ -103,70 +87,76 @@ var Senyu = function(canvas, prop) {
 		ctx.fillRect( x, y, width, 1 );
 	};
 	
-	var clearArea = function(ctx, x, y, width, height) {
+	var clearArea = function(param, x, y, width, height) {
+		var ctx = param.bufferContext;
 		var oriFillStyle = ctx.fillStyle;
 		{
-			ctx.fillStyle = this.backgroundColor;
+			ctx.fillStyle = param.backgroundColor;
 			ctx.fillRect(x,y,width, height);
 		}
 		ctx.fillStyle = oriFillStyle;
 	};
 	
-	var drawBarGraphPart = function(prop, sx, sy, fillBarPercent) {
-		var ctx = prop.bufferContext;
+	var drawBarGraphPart = function(param, sx, sy, fillBarPercent) {
+		var ctx = param.bufferContext;
 		var oriFillStyle = ctx.fillStyle;
 		{
 			var tx, ty;
 			var funcDrawLine;
 			var singleBarWidth_;
-			var leftShift_;
 			
-			var fillBarCnt = Math.round(prop.barCount * fillBarPercent / 100);
-			for ( var dy=0;dy < prop.barCount;dy++ ) {
-				if ( (prop.barCount - dy ) <= fillBarCnt ) {
+			var fillBarCnt = Math.round(param.barCount * fillBarPercent / 100);
+			for ( var dy=0;dy < param.barCount;dy++ ) {
+				var fillBar = false;
+				if ( (param.barCount - dy ) <= fillBarCnt ) {
 					// drawLine
-					ctx.fillStyle = prop.green;
+					ctx.fillStyle = param.green;
 					funcDrawLine = drawLine;
-					singleBarWidth_ = prop.singleBarWidth;
-					leftShift_ = 0;
+					singleBarWidth_ = param.singleBarWidth;
+					fillBar = true;
 				} else {
 					// dotLine
-					ctx.fillStyle= prop.darkGreen;
+					ctx.fillStyle= param.darkGreen;
 					funcDrawLine = drawDotLine;
-					singleBarWidth_ = prop.singleBarWidth;
-					leftShift_ = prop.leftShift;
+					singleBarWidth_ = param.singleBarWidth;
 				}
-				// FirstRow
-				tx = sx;
-				ty = sy+dy*3;
-				funcDrawLine(ctx, tx, ty, singleBarWidth_);
 				
-				// SecondRow
-				tx = sx+leftShift_;
-				ty = ty + 1;
-				funcDrawLine(ctx, tx, ty, singleBarWidth_);
+				for ( var singleLineIdx=0;singleLineIdx<(param.singleBarHeight); singleLineIdx++ ) {
+					
+					// FirstRow
+					tx = sx;
+					if ( !fillBar && (singleLineIdx%2 == 1) ) {
+						tx += param.leftShift;
+					}
+					ty = sy+ (dy * (param.singleBarHeight + param.gapBetweenSingleBarRow)) + singleLineIdx;
+					funcDrawLine(ctx, tx, ty, singleBarWidth_);
+				}
 			}
 		}
 		ctx.fillStyle = oriFillStyle;
 	};
 	
-	var drawBarGraph = function(prop, sx, sy, fillBarPercent) {
-		var ctx = prop.bufferContext;
+	var drawBarGraph = function(param, sx, sy, fillBarPercent, idx) {
+		var ctx = param.bufferContext;
 		var oriFillStyle = ctx.fillStyle;
 		
 		{
-			drawBarGraphPart(prop, sx, sy, fillBarPercent);
-			sx = sx+prop.singleBarWidth+prop.leftShift+prop.gapBetweenSingleBar;
-			drawBarGraphPart(prop, sx, sy, fillBarPercent);
+			drawBarGraphPart(param, sx, sy, fillBarPercent);
+			sx = sx+param.singleBarWidth+param.leftShift+param.gapBetweenSingleBar;
+			drawBarGraphPart(param, sx, sy, fillBarPercent);
 			
-			sy = prop.height - prop.paddingTop - prop.bottomLabelAreaHeight + 15;
-			ctx.fillStyle=prop.green;
-			ctx.font = prop.font;
+			sy = param.height - param.paddingTop - param.bottomLabelAreaHeight + 15;
+			ctx.fillStyle=param.green;
+			ctx.font = param.font;
 			ctx.textAlign='center'; 
 			ctx.fillText(Math.round(fillBarPercent)+'%',sx,sy);
 			
 			sy = sy + 20;
-			ctx.fillText('하하행',sx,sy);
+			if ( param.labels != null ) {
+				if ( param.labels[idx] != null ) {
+					ctx.fillText(param.labels[idx],sx,sy);
+				}
+			}
 			
 		}
 		ctx.fillStyle = oriFillStyle;
@@ -174,26 +164,43 @@ var Senyu = function(canvas, prop) {
 	
 	// public methods
 	proto.drawBarGraph = function(fillBarPercents) {
-		if ( this.prop.graphCount != fillBarPercents.length ) {
-			throwError("prop.graphCount != fillBarPercents.length");
+		var param = this.param;
+		if ( param.graphCount != fillBarPercents.length ) {
+			Senyu.throwError("param.graphCount != fillBarPercents.length");
 		}
-		var bufferContext = this.prop.bufferContext;
-		var sx = this.prop.paddingLeft;
-		var sy = this.prop.paddingTop;
+		var bufferContext = param.bufferContext;
+		var sx = param.paddingLeft;
+		var sy = param.paddingTop;
 		
-		clearArea(bufferContext, 0, 0, this.prop.width, this.prop.height);
+		clearArea(param, 0, 0, param.width, param.height);
 		for(var idx in fillBarPercents) {
-			drawBarGraph(this.prop, sx, sy, fillBarPercents[idx]); 
-			sx += this.prop.singleBarWidth*2 + this.prop.gapBetweenSingleBar + this.prop.gapBetweenGraph;
+			drawBarGraph(param, sx, sy, fillBarPercents[idx], idx); 
+			sx += param.singleBarWidth*2 + param.gapBetweenSingleBar + param.gapBetweenGraph;
     	}
+		
 		bufferContext.stroke();
-		this.prop.canvasContext.drawImage(this.prop.bufferCanvas, 0, 0);
+		param.canvasContext.drawImage(param.bufferCanvas, 0, 0);
 	};
 	
 	proto.initLabel = function(labels) {
-		if ( this.prop.graphCount != labels.length ) {
-			throwError("prop.graphCount != labels.length");
+		var param = this.param;
+		if ( param.graphCount != labels.length ) {
+			Senyu.throwError("param.graphCount != labels.length");
 		}
-		this.prop.labels = labels;
+		param.labels = labels;
+	};
+
+	// assert ( Senyu static function)
+	Senyu.assert = function(condition, message) {
+	    if (!condition) {
+	    	Senyu.throwError( message || "Assertion failed." );
+	    }
+	};
+
+	// handling exception ( Senyu static function)
+	Senyu.throwError = function(msg) {
+		var e = new Error(msg);
+		console.log(e);
+		throw e;
 	};
 }(Senyu.prototype);
