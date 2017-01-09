@@ -1,0 +1,34 @@
+/*
+ * cat topbottomlayout3.sass | node-sass  > topbottomlayout3.css
+ */
+$primary-color: #333;
+$left-menu-width: 250px;
+
+#contener {
+	background-color:#9977dd;
+	width: 800px;
+}
+
+#left {
+	background-color:#6677bb;
+	float: left;
+	width: $left-menu-width;
+	height: 200px;
+	display: inline-bl
+}
+
+#main {
+	background-color:#99ddcc;
+	float: right;
+	width: 530px;
+	height: 400px;
+	width: -webkit-calc(100% - ($left-menu-width));
+    width:    -moz-calc(100% - $left-menu-width);
+    width:         calc(100% - $left-menu-width);
+}
+
+#footer {
+	background-color:#cc7799;
+	clear: both;
+	height: 100px;
+}

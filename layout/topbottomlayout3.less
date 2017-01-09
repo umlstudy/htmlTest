@@ -1,0 +1,32 @@
+/*
+ * cat topbottomlayout3.less | node-less  > topbottomlayout3.css
+ */
+@nav-width: 250px;
+
+#contener {
+  background-color: #9977dd;
+  width: 800px; }
+
+#nav {
+  background-color: #6677bb;
+  width: @nav-width;
+  height: 200px;
+  display: inline-block; }
+
+#main {
+  background-color: #99ddcc;
+  float: right;
+  height: 400px;
+  width: -webkit-calc(~"100% - @{nav-width}");
+  width: -moz-calc(~"100% - @{nav-width}");
+  width: calc(~"100% - @{nav-width}"); }
+
+#footer {
+  background-color: #cc7799;
+  clear: both;
+  height: 100px; }
+
+#content {
+  overflow-x: none;
+  overflow-y: none
+}

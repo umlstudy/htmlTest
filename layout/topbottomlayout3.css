@@ -1,0 +1,33 @@
+/*
+ * cat topbottomlayout3.less | node-less  > topbottomlayout3.css
+ */
+#contener {
+  background-color: #9977dd;
+  width: 800px;
+}
+#nav {
+  background-color: #6677bb;
+  width: 250px;
+  height: 200px;
+  display: inline-block;
+  vertical-align: bottom;
+}
+#main {
+  background-color: #99ddcc;
+  height: 400px;
+  display: inline-block;
+  vertical-align: bottom;
+  width: -webkit-calc(100% - 260px);
+  width: -moz-calc(100% - 260px);
+  width: calc(100% - 260px);
+}
+#footer {
+  background-color: #cc7799;
+  clear: both;
+  height: 100px;
+}
+#content {
+  height:400px;
+  overflow-x: scroll;
+  overflow-y: scroll;
+}
