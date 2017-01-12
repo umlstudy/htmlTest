@@ -1,0 +1,12 @@
+
+<script>
+EcsComponents.initModalDialog('retailInfoDialog', '<h2>거래처정보</h2>');
+var modalBodyTemplate = EcsComponents.loadUrlText('${baseUrl}/view/register/retail/georaecheoInfo.tmpl.html');
+
+var replaceModalDialogBody = function(comSeqNo) {
+	var jsonText = EcsComponents.loadUrlText('d/base/companyInfo/selectCompanyInfoPureJson?comSeqNo='+comSeqNo);
+	var json = JSON.parse(jsonText);
+	var replaceHtml = EcsComponents.templateEngine(modalBodyTemplate, json);
+	EcsComponents.replaceModalDialogBody('retailInfoDialog', replaceHtml);
+};
+</script>
